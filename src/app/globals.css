@@ -31,6 +31,7 @@
   color: hsl(228, 45%, 44%);
 }
 
+
 .dark {
   --background: var(--color-very-dark-blue-bg);
   --foreground: var(--color-white);
@@ -48,3 +49,25 @@ body {
 }
 
 
+/* Custom NProgress Styles */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: #3b82f6; /* Tailwind Blue-500 */
+  height: 4px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1031;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #3b82f6, 0 0 5px #3b82f6;
+}
+
+#nprogress .spinner {
+  display: none; /* Hide default spinner */
+}

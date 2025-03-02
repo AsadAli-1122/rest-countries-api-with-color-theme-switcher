@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import data from "@/data/data.json";
 import Link from "next/link";
 
@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 px-4 lg:px-0 py-6 sm:grid-cols-2">
         {/* Search Input */}
         <label className="bg-gray-200 dark:bg-gray-900 px-4 py-2 rounded-sm flex space-x-2 cursor-text duration-200 ease-in-out w-full sm:max-w-64 sm:mr-auto">
@@ -175,13 +175,13 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="attribution mt-8">
+      {/* <div className="attribution mt-8">
         Challenge by{" "}
         <a href="https://www.frontendmentor.io?ref=challenge">
           Frontend Mentor
         </a>
         . Coded by <Link href="https://codebyasad.vercel.app/">Asad Ali</Link>.
-      </div>
+      </div> */}
     </>
   );
 }

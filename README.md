@@ -2,9 +2,9 @@
 
 This is a solution to the [REST Countries API Challenge](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca).  
 
-![REST Countries App](/images/REST Countries API with color theme switcher.png)  
+![REST Countries App](public/images/REST Countries API with color theme switcher.png)  
 
-🚀 **Live Demo:** [View on Vercel](https://rest-countries-yourunique.vercel.app)  
+🚀 **Live Demo:** [View on Vercel](https://rest-countries-api-with-color-theme-switcher-tau-five.vercel.app/)  
 📂 **GitHub Repo:** [View on GitHub](https://github.com/AsadAli-1122/rest-countries)  
 
 ## 📌 Features  

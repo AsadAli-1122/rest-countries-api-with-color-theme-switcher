@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import data from "@/data/data.json";
-import Header from "@/app/components/Header";
+// import Header from "@/app/components/Header";
 import Image from "next/image";
 import Link from "next/link";
   
@@ -59,7 +59,7 @@ export default async function CountryDetails({
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="max-w-5xl mx-auto px-4 lg:px-0 py-6">
         <Link
           href="/"
@@ -114,13 +114,13 @@ export default async function CountryDetails({
           </div>
         </div>
       </div>
-      <div className="attribution mt-8">
+      {/* <div className="attribution mt-8">
         Challenge by{" "}
         <a href="https://www.frontendmentor.io?ref=challenge">
           Frontend Mentor
         </a>
         . Coded by <Link href="https://codebyasad.vercel.app/">Asad Ali</Link>.
-      </div>
+      </div> */}
     </>
   );
 }
