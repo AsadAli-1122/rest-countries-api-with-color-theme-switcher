@@ -1,101 +1,187 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import Header from "./components/Header";
+import data from "@/data/data.json";
+import Link from "next/link";
+
+const itemsPerPage = 8;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [search, setSearch] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("All");
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // Get unique regions
+  const regions = useMemo(() => {
+    const uniqueRegions = Array.from(new Set(data.map((c) => c.region)));
+    return ["All", ...uniqueRegions];
+  }, []);
+
+  // Filter data based on search and selected region
+  const filteredData = useMemo(() => {
+    return data
+      .filter((country) =>
+        country.name.toLowerCase().includes(search.toLowerCase())
+      )
+      .filter((country) =>
+        selectedRegion === "All" ? true : country.region === selectedRegion
+      );
+  }, [search, selectedRegion]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(start, start + itemsPerPage);
+  }, [filteredData, currentPage]);
+
+  useEffect(()=>{
+    setCurrentPage(1);
+  },[search, selectedRegion])
+
+  return (
+    <>
+      <Header />
+      <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 px-4 lg:px-0 py-6 sm:grid-cols-2">
+        {/* Search Input */}
+        <label className="bg-gray-200 dark:bg-gray-900 px-4 py-2 rounded-sm flex space-x-2 cursor-text duration-200 ease-in-out w-full sm:max-w-64 sm:mr-auto">
+          <svg
+            className="w-5 h-5 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <path
+              fillRule="evenodd"
+              d="M10 2a8 8 0 0 1 5.293 13.707l4.5 4.5a1 1 0 0 1-1.414 1.414l-4.5-4.5A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 4.243 10.243A6 6 0 0 0 10 4z"
+              clipRule="evenodd"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </svg>
+          <input
+            type="text"
+            placeholder="Search for a country"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="text-gray-700 dark:placeholder:text-gray-400 dark:text-gray-400 focus:outline-none"
+          />
+        </label>
+
+        {/* Region Filter */}
+        <div className="relative ml-auto w-full sm:max-w-64">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-gray-400 rounded-sm py-2 px-4 flex justify-between items-center focus:outline-none cursor-pointer"
           >
-            Read our docs
-          </a>
+            {selectedRegion}
+            <svg
+              className="w-5 h-5 text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          {isOpen && (
+            <ul className="absolute w-full mt-1 bg-white dark:bg-gray-800 shadow-lg rounded-md max-h-40 overflow-y-auto">
+              {regions.map((region) => (
+                <li
+                  key={region}
+                  onClick={() => {
+                    setSelectedRegion(region);
+                    setIsOpen(false);
+                  }}
+                  className="px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer transition duration-200"
+                >
+                  {region}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Countries List */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 lg:px-0 w-full max-w-5xl mx-auto">
+        {paginatedData.map((country) => (
+          <div
+            key={country.name}
+            className="bg-white rounded-lg shadow-sm dark:bg-gray-700/50"
+          >
+            <Link href={`/country/${encodeURIComponent(country.name)}`}>
+              <img
+                className="rounded-t-lg aspect-video object-center object-cover"
+                src={country.flag}
+                alt={`${country.name} flag`}
+              />
+            </Link>
+            <div className="p-5">
+              <Link href={`/country/${encodeURIComponent(country.name)}`}>
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {country.name}
+                </h5>
+              </Link>
+              <p className="text-gray-400 dark:text-gray-300">
+                <span className="font-semibold">Population:</span>{" "}
+                <span className="font-light">{country.population}</span>
+              </p>
+              <p className="text-gray-400 dark:text-gray-300">
+                <span className="font-semibold">Region:</span>{" "}
+                <span className="font-light">{country.region}</span>
+              </p>
+              <p className="text-gray-400 dark:text-gray-300">
+                <span className="font-semibold">Capital:</span>{" "}
+                <span className="font-light">{country.capital}</span>
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center space-x-2 my-6">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded cursor-pointer ${
+            currentPage === 1
+              ? "bg-gray-200 dark:bg-gray-700 cursor-not-allowed"
+              : "bg-gray-500 hover:bg-gray-950 text-white"
+          }`}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Prev
+        </button>
+        <span className="text-gray-700 dark:text-gray-300">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded cursor-pointer ${
+            currentPage === totalPages
+              ? "bg-gray-200 dark:bg-gray-700 cursor-not-allowed"
+              : "bg-gray-500 hover:bg-gray-950 text-white"
+          }`}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
+          Next
+        </button>
+      </div>
+
+      <div className="attribution mt-8">
+        Challenge by{" "}
+        <a href="https://www.frontendmentor.io?ref=challenge">
+          Frontend Mentor
         </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        . Coded by <Link href="https://codebyasad.vercel.app/">Asad Ali</Link>.
+      </div>
+    </>
   );
 }
