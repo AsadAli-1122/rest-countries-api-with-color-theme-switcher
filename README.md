@@ -34,7 +34,3 @@ This is a solution to the [REST Countries API Challenge](https://www.frontendmen
 
 🚀 **Asad Ali**  
 🔗 [Portfolio](https://codebyasad.vercel.app) | 🐙 [GitHub](https://github.com/AsadAli-1122) | 💡 [Frontend Mentor](https://www.frontendmentor.io/profile/AsadAli-1122)  
-
----
-
-Let me know if this looks perfect or if you want any modifications! 🚀
